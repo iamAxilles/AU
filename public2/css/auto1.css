@@ -1,0 +1,30 @@
+/* legend, data {
+  position: relative;
+  margin: 0 auto;
+  width: 1000;
+  display: grid;
+    } */
+
+
+legend {
+  width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  display: grid;
+  background-color: black;
+}
+
+data {
+    min-height: 616px;
+    height: fit-content;
+    display: grid;
+    background-color: white;
+}
+
+.mySlides img{
+  width: 1000px;
+}
+
+body {
+  background-color: black;
+}
