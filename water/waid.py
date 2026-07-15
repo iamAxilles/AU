@@ -42,7 +42,7 @@ async def waid(n):
         car.append({ fuel, badge, selltype })
 
         photos = []
-        for c in range(1,4):
+        for c in range(1,10):
     #
             photo_url = f'http://ci.encar.com/carpicture{photo_path}00{c}.jpg?impolicy=heightRate'
             # print(photo_url)
