@@ -60,7 +60,7 @@ async def run(LLL):
         except Exception as e:
             return json.dumps({"error": f"Connection failed: {e}"})
 
-        for item in data[:5]:
+        for item in data[:25]:
             try:
                 photo_path = item.get('Photo')
                 if not photo_path:
