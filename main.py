@@ -8,8 +8,7 @@ mimetypes.add_type('text/css', '.css')
 import requests, json
 
 from water.airwater import run
-from water.water2 import run2
-#from water.air3 import run3
+
 
 import idvehi
 import jsonCars

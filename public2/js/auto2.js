@@ -40,6 +40,9 @@
 
   			}
 
+			const loading = document.querySelector('Loading');
+				loading.remove();
+
         		let slideIndex = 1;
         		showSlides(slideIndex);
 

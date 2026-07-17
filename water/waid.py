@@ -42,7 +42,7 @@ async def waid(n):
         car.append({ fuel, badge, selltype })
 
         photos = []
-        for c in range(1,4):
+        for c in range(1,10):
     #
             photo_url = f'http://ci.encar.com/carpicture{photo_path}00{c}.jpg?impolicy=heightRate'
             # print(photo_url)
@@ -57,7 +57,7 @@ async def waid(n):
     #         photos.append(
     #         photo_url
     #         )
-
+        print(photos)
 
     async def fetch_one(client: httpx.AsyncClient, url: str, timeout_s=30):
         r = await client.get(url, timeout=timeout_s)
@@ -76,7 +76,7 @@ async def waid(n):
                 return watermark(img)
 
             results = await asyncio.gather(*(worker(u) for u in urls))
-            print('done')
+
 
         return results
 

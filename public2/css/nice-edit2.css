@@ -20,6 +20,7 @@
 
 #sec-f05f {
   transition: box-shadow 0.3s ease;
+  box-shadow: 1pc 5px 50px #141414, 0 5px 6px #0b0a0a;
 }
 
 

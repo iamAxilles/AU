@@ -52,7 +52,7 @@ async def run(LLL):
         "Referer": 'https://ci.encar.com'
                 }
 
-    async with httpx.AsyncClient(headers=g) as client:
+    async with httpx.AsyncClient(headers=h) as client:
         try:
             response = await client.get(LLL)
             data = response.json()
@@ -60,7 +60,7 @@ async def run(LLL):
         except Exception as e:
             return json.dumps({"error": f"Connection failed: {e}"})
 
-        for item in data[:5]:
+        for item in data[:25]:
             try:
                 photo_path = item.get('Photo')
                 if not photo_path:
@@ -104,6 +104,7 @@ async def run(LLL):
             except Exception as e:
                 marks.append({"error": str(e), "path": photo_path})
 
+                print(len(marks))
     #pp = pprint.PrettyPrinter(indent=2, width=30, compact=True)
     ##return pp.pprint(marks)
 
