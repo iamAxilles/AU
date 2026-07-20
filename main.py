@@ -98,9 +98,6 @@ def car3():
 async def airwater():
     return await run()
 
-@app.get("/water2", response_class=HTMLResponse)
-def water2():
-    return run2()
 
 #@app.get("/air3", response_class=HTMLResponse)
 #def air3():
