@@ -64,13 +64,18 @@ def pro3():
 
 
 @app.get("/vehs", response_class = FileResponse)
-def cars():
+def vehs():
     return "public2/vehs.html"
 
 
 @app.get("/car", response_class = FileResponse)
 def car3():
     return "public2/auto1.html"
+
+
+@app.get("/intro", response_class = FileResponse)
+def intro():
+    return "public2/intro.html"
 
 
 
@@ -98,9 +103,6 @@ def car3():
 async def airwater():
     return await run()
 
-@app.get("/water2", response_class=HTMLResponse)
-def water2():
-    return run2()
 
 #@app.get("/air3", response_class=HTMLResponse)
 #def air3():

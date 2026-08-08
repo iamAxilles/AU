@@ -4,11 +4,11 @@
 
 			// const wlh = window.location.href;
 			// <a href="/car?${sr.Manufacturer}=${sr.ModelEn}#${sr.Id}${wlh.slice(-2)}" target="_blank">
-			const ls = (location.search).substr(1,wls.indexOf("-"));
+			const ls = (location.search).substr(0,wls.indexOf("-"));
 				function output(SR){
 					let data = document.querySelector(`data`);$(`data`).empty();
 						data.innerHTML = SR.map(sr => `<output>
-													<a href="/car?${ls}#${sr.Id}"target="_blank">
+													<a href="/car${ls}#${sr.Id}"target="_blank">
 
 														<img src="${sr.image_data}">
 														  <img src="${sr.image_data2}">

@@ -1,7 +1,13 @@
 import httpx, json, base64, asyncio
 from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
+
 g = {"User-Agent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"}
+h = {
+        "User-Agent": 'Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)',
+        # "Host": 'ci.encar.com'
+        "Referer": 'https://ci.encar.com'
+                }
 
 
 async def waid(n):
@@ -62,16 +68,18 @@ async def waid(n):
     async def fetch_one(client: httpx.AsyncClient, url: str, timeout_s=30):
         r = await client.get(url, timeout=timeout_s)
         r.raise_for_status()
+        print(r.status_code)
         return url, r.content
 
     async def watermarked_from_urls(urls, concurrency=10):
         sem = asyncio.Semaphore(concurrency)
 
-        async with httpx.AsyncClient(headers=g) as client:
+        async with httpx.AsyncClient(headers=h) as client:
             async def worker(url):
                 async with sem:
                     r = await client.get(url, timeout=30)
                     r.raise_for_status()
+                    print(r.status_code)
                 img = Image.open(BytesIO(r.content))
                 return watermark(img)
 

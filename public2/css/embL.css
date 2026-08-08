@@ -49,6 +49,7 @@
 }
 
 .section2 {
+  zoom: 87%;
   overflow-y: hidden;
   /*white-space: nowrap;*/
   /*height: auto;*/
@@ -94,7 +95,7 @@ input+label{
 .Chevy,
 .Ki,
 .BM,
-.MRC,
+.Mercedes,
 .prce {
 /*  position: relative;*/
   display: table;
@@ -208,7 +209,7 @@ ul#list>li>a{
   background-image:url(emblemPics/merc6.png);
   background-size: contain; height: 88px; width: 100px;
 }
-#merc:checked ~ .MRC{
+#merc:checked ~ .Mercedes{
   line-height: 2.2;
   color: currentColor;
 }

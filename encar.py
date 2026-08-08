@@ -30,6 +30,8 @@ async def bmw(n:str):
             return O('public2/api/vehi/bmw/5.json')
 
 
+
+
 @encar.get("/benz={n}")
 async def bmw(n:str):
     match n:
@@ -45,6 +47,8 @@ async def bmw(n:str):
             return O(f'public2/api/vehi/benz/C{5}.json')
 
 
+
+
 @encar.get("/chevy={m}")
 async def chevy(m:str):
     match m:
@@ -57,15 +61,7 @@ async def chevy(m:str):
                 photos = item.get("Photos")
                 result = [p["location"] for p in photos if p.get("type") in {"001", "007"}]
                 return result
-
-
-
-
-
-
-
-
-
+        # case "trax":
 
 
 

@@ -9,6 +9,7 @@ from typing import List
 from water.airwater import run
 
 from water.waid import waid
+import httpx, base64
 
 from fastapi.encoders import jsonable_encoder
 
@@ -85,6 +86,7 @@ lh = 'http://localhost:8000'
 
 @vehi.get("/Chevy={model}-{iddd}")#response_model=List[str]
 async def chevy(model: str, iddd: str):
+
     if 'Trailblazer' in model:
         re = await raQ(lh+'/encar/chevy=trailblazer')
 
@@ -93,11 +95,33 @@ async def chevy(model: str, iddd: str):
 
         i = list(filter(lambda d:d["Id"]==iddd, re))
         # w = await waid(i)
+        # one = [d for d in re if d.get("Id") == iddd]
+        return i
+        # return await waid(i)
 
-        return await waid(i)
         # JSONResponse(jsonable_encoder(w))
         # json_str = json.dumps(w, indent=4, default=str)
         # return json_str
+
+    if 'Trax' in model:
+        re = await raQ('https://api.encar.com/search/car/list/premium?count=true&q=(And.Hidden.N._.(C.CarType.Y._.(C.Manufacturer.%EC%89%90%EB%B3%B4%EB%A0%88(GM%EB%8C%80%EC%9A%B0_)._.(C.ModelGroup.%ED%8A%B8%EB%9E%99%EC%8A%A4._.Model.%EB%8D%94+%EB%89%B4+%ED%8A%B8%EB%9E%99%EC%8A%A4.))))&sr=%7CModifiedDate%7C0%7C20')
+                      # https://api.encar.com/search/car/list/premium?count=true&q=(And.Hidden.N._.(C.CarType.Y._.(C.Manufacturer.쉐보레(GM대우_)._.(C.ModelGroup.트랙스._.Model.더+뉴+트랙스.))))&sr=|ModifiedDate|0|20
+
+        # i = list(filter(lambda d:d["Id"]==iddd, re))
+        # one = next((d for d in re["SearchResults"] if d.get("Id") == iddd), None)
+        # one = [d for d in re['SearchResults'] if d.get("Id") == iddd]
+
+        # p = await rePh(f'https://ci.encar.com/carsdata/cars/inspection/{iddd}_photoPerform1.jpg')
+
+        one = [d for d in re['SearchResults'] if d.get("Id") == iddd]
+        return await waid(one)
+        # return one
+
+
+async def rePh(ph):
+    async with httpx.AsyncClient(headers=h) as cl:
+        resp = await cl.get(ph)
+        return resp
 
 
 @vehi.get("/list", response_model=List[str])
