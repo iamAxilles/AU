@@ -6,6 +6,7 @@ data{
   justify-content: center;
   /*background-color: whitesmoke;*/
   min-height: 15pc;
+  zoom: 90%;
 }
 
 output {

@@ -38,7 +38,7 @@
 
 		var mYslides = document.createElement('div'); mYslides.className = `mySlides`; mYslides.id = cc; container.appendChild(mYslides);
 		let img1 = document.createElement('img'); img1.style = `width: 100%`; img1.src = 'http://ci.encar.com/carpicture'+res[0].Photo+'0'+cc+'.jpg?impolicy=heightRate'; mYslides.appendChild(img1);
-
+		
 		// = = = scroll - - -
 
 		let img = document.createElement(`img`); img.style = `height: `; img.src = 'http://ci.encar.com/carpicture'+res[0].Photo+'0'+cc+'.jpg?impolicy=heightRate'; img.className = "demo cursor"; img.id = cc;

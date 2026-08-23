@@ -13,17 +13,18 @@
 
   		const res = await f(`/vehi/${moden}-${idd}`);
 
-      console.log(res[0][0][2]);
+      console.log(res[0]);//ценник
+      // console.log(res[1]);
 
     	const container = document.querySelector('.container');
   		const scroll = document.querySelector('.scroll-container');
 
       var cc = 1;
-  		for(; cc < 10; cc++){
+  		for(; cc < 20; cc++){
 
   		var mYslides = document.createElement('div'); mYslides.className = `mySlides`; mYslides.id = cc; container.appendChild(mYslides);
 
-  		let img1 = document.createElement('img'); img1.src = res[0][cc];
+  		let img1 = document.createElement('img'); img1.src = res[1][cc];
 
       mYslides.appendChild(img1);
 
@@ -31,7 +32,7 @@
 
   		// = = = scroll - - -
 
-  		let img = document.createElement(`img`); img.src = res[0][cc];
+  		let img = document.createElement(`img`); img.src = res[1][cc];
       img.className = "demo cursor"; img.id = cc;
 
   		img.addEventListener( "click" , () => currentSlide(Number(img.id)));

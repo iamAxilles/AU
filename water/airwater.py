@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 async def run(LLL):
-    def watermark(base: Image.Image, opacity=0.85, font_size=100):
+    def watermark(base: Image.Image, opacity=0.7, font_size=16): #100
 
         overlay = Image.new("RGBA", base.size, (0, 0, 0, 0))
         draw = ImageDraw.Draw(overlay)
@@ -19,16 +19,16 @@ async def run(LLL):
 
         r, g, b = (60, 60, 90)
         alpha = int(255 * max(0, min(1, opacity)))
-        draw.text((125, 250), 'SK™Automobile', fill=(r, g, b, alpha), font=font)
-
+        draw.text((12, 35), 'SK™Automobile', fill=(r, g, b, alpha), font=font)
+        #125,250
         out = Image.alpha_composite(base, overlay)
 
         buffer = BytesIO()
-        out.convert("RGB").save(buffer, format="webp")
+        out.convert("RGB").save(buffer, format="webp", quality=70, method=2)
         # out.save('output_.webp')
 
         b64 = base64.b64encode(buffer.getvalue()).decode("ascii")
-        return f"data:image/jpeg;base64,{b64}"
+        return f"data:image/webp;base64,{b64}"
 
 
     def google(text: str) -> str:
@@ -60,14 +60,16 @@ async def run(LLL):
         except Exception as e:
             return json.dumps({"error": f"Connection failed: {e}"})
 
-        for item in data[:25]:
+        for item in data['SearchResults'][:20]:
             try:
                 photo_path = item.get('Photo')
                 if not photo_path:
                     continue
 
-                photo_url = f'http://ci.encar.com/carpicture{photo_path}001.jpg?impolicy=heightRate'
-                photo_url2 = f'http://ci.encar.com/carpicture{photo_path}007.jpg?impolicy=heightRate'
+                # photo_url = f'http://ci.encar.com/carpicture{photo_path}001.jpg?impolicy=heightRate'
+                # photo_url2 = f'http://ci.encar.com/carpicture{photo_path}007.jpg?impolicy=heightRate'
+                photo_url = f'https://ci.encar.com/carpicture{photo_path}001.jpg?impolicy=heightRate&rh=192&cw=320&ch=192&cg=Center&wtmk=https://&wtmkg=S&wtmkw=7&wtmkh=3'
+                photo_url2 = f'https://ci.encar.com/carpicture{photo_path}007.jpg?impolicy=heightRate&rh=192&cw=320&ch=192&cg=Center&wtmk=https://&wtmkg=S&wtmkw=7&wtmkh=3'
 
                 img_res = await client.get(photo_url)
                 img_res2 = await client.get(photo_url2)
@@ -107,7 +109,7 @@ async def run(LLL):
                 print(len(marks))
     #pp = pprint.PrettyPrinter(indent=2, width=30, compact=True)
     ##return pp.pprint(marks)
-
+        
     #return json.dumps(marks, indent=2)
     return marks
 

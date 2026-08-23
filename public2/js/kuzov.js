@@ -75,13 +75,12 @@ $(`#X5`).click(async()=>{
     })
 //-----------------------------------------------------------------------------------------------
 //Mercedes-benz
-$(`#C-klasse`).click(async()=>{
-    //let cars = await G(`vehi/${moden}/${idd}`);
+// $(`#C-klasse`).click(async()=>{
 
-        window.location.assign('/vehs?benz=C-kl/1')
+        // window.location.assign('/vehs?benz=C-kl/1')
 
-    });
-if (WL$.includes(`benz=C`) ) { f05f.style.backgroundImage = "url('../css/images/benzCpics/C.jpeg')";
+    // });
+if (WL$.includes(`Mercedes=C`) ) { f05f.style.backgroundImage = "url('../css/images/benzCpics/C.jpeg')";
         $(`.kuzova`).append(`
             <option>W206</option>
             <option>W205</option>

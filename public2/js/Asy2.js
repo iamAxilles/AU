@@ -12,7 +12,8 @@
          //SRjson = JSON.parse(FER);
         localStorage.setItem("1st", wls);
 
-        sorts.dates(FER);
+        try { sorts.dates(FER); }
+        catch (err) { console.log(err); }
 
 
     //function KZ(v) {
@@ -21,7 +22,7 @@
    //$(`select.kuzova`).change(function(){var kuval=$(this).val();console.log(kuval);
     //            KZ(kuval);
     //    });
-
+        
 
     $(`select[name='sort']`).change(function(){var sor = $(this).val() //console.info(sor)
             switch (sor){
@@ -57,7 +58,7 @@
                         break;
         }
 
-    return FER })('/cars/'+wls.slice(1));
+    return FER })('/vehi/'+wls.slice(1));
 
 
 

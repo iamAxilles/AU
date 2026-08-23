@@ -1,14 +1,20 @@
 # -*- coding: utf-8 -*-
 from fastapi import APIRouter
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+
 import requests, json
 from konlpy.tag import Kkma
 
+from encar import F
 from jsonCars import O, raQ, h
 from typing import List
+
 from water.airwater import run
 
-from water.waid import waid
+# from water.waid import waid
+from water.waid4 import waid4
+
+import httpx, base64, asyncio
 
 from fastapi.encoders import jsonable_encoder
 
@@ -85,6 +91,7 @@ lh = 'http://localhost:8000'
 
 @vehi.get("/Chevy={model}-{iddd}")#response_model=List[str]
 async def chevy(model: str, iddd: str):
+
     if 'Trailblazer' in model:
         re = await raQ(lh+'/encar/chevy=trailblazer')
 
@@ -93,11 +100,44 @@ async def chevy(model: str, iddd: str):
 
         i = list(filter(lambda d:d["Id"]==iddd, re))
         # w = await waid(i)
+        # one = [d for d in re if d.get("Id") == iddd]
+        return i
+        # return await waid(i)
 
-        return await waid(i)
         # JSONResponse(jsonable_encoder(w))
         # json_str = json.dumps(w, indent=4, default=str)
         # return json_str
+
+    if 'Trax' in model:
+        # re = await raQ('http://localhost:8000/vehi/Chevy=Trax-gm/1')
+                      # https://api.encar.com/search/car/list/premium?count=true&q=(And.Hidden.N._.(C.CarType.Y._.(C.Manufacturer.쉐보레(GM대우_)._.(C.ModelGroup.트랙스._.Model.더+뉴+트랙스.))))&sr=|ModifiedDate|0|20
+
+        u = f'https://api.encar.com/v1/readside/vehicle/{iddd}'
+
+        # r = requests.get(ulr, headers=h)
+        # one = car["advertisement"]["price"]
+
+        # i = list(filter(lambda d:d["Id"]==iddd, re))
+        # one = next((d for d in re["SearchResults"] if d.get("Id") == iddd), None)
+        # one = [d for d in re['SearchResults'] if d.get("Id") == iddd]
+
+        # p = await rePh(f'https://ci.encar.com/carsdata/cars/inspection/{iddd}_photoPerform1.jpg')
+
+        # one = [d for d in re['SearchResults'] if d.get("Id") == iddd]
+
+        # one = [d for d in trax1json if isinstance(d, dict) and d.get("Id") == iddd]
+        # one = [d for d in trax1json if d.get("Id") == iddd]
+        # return await waid(one)
+        return await waid4(u)
+
+
+
+async def rePh(ph):
+    async with httpx.AsyncClient(headers=h) as cl:
+        resp = await cl.get(ph)
+        return resp.json()
+
+
 
 
 @vehi.get("/list", response_model=List[str])

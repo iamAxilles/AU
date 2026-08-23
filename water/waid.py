@@ -1,7 +1,13 @@
-import httpx, json, base64, asyncio
+import httpx, json, base64, asyncio, requests
 from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
+
 g = {"User-Agent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"}
+h = {
+        "User-Agent": 'Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)',
+        # "Host": 'ci.encar.com'
+        "Referer": 'https://ci.encar.com'
+                }
 
 
 async def waid(n):
@@ -23,23 +29,33 @@ async def waid(n):
         out = Image.alpha_composite(img, overlay)
 
         buf = BytesIO()
-        out.convert("RGB").save(buf, format="WEBP", quality=90)
-        out.save('output_.webp')
+        out.convert("RGB").save(buf, format="WEBP", quality=100)
+        # out.save('output_.webp')
 
         b64 = base64.b64encode(buf.getvalue()).decode("ascii")
         return f"data:image/webp;base64,{b64}"
 
 
+    car = []
 
     for i in n:
-    #
+
+        ulr = f'https://api.encar.com/v1/readside/inspection/vehicle/{i['Id']}'
+        r = requests.get(ulr, headers=h)
+        # r.raise_for_status()
+        # p = r.status_code
+        print(i['Id'])
+
         photo_path = i['Photo']
         fuel = i['FuelType']
         badge = i['Badge']
         selltype = i['SellType']
+        # card1 = f'https://ci.encar.com/carsdata/cars/inspection/{idd}_photoPerform1.jpg'
+        print(selltype)
 
-        car = []
+        
         car.append({ fuel, badge, selltype })
+        car.append({ i['Id'], r })
 
         photos = []
         for c in range(1,10):
@@ -57,21 +73,26 @@ async def waid(n):
     #         photos.append(
     #         photo_url
     #         )
-        print(photos)
 
-    async def fetch_one(client: httpx.AsyncClient, url: str, timeout_s=30):
-        r = await client.get(url, timeout=timeout_s)
-        r.raise_for_status()
-        return url, r.content
+        # print(photos)
 
+    # async def fetch_one(client: httpx.AsyncClient, url: str, timeout_s=1):
+    #     r = await client.get(url, timeout=timeout_s)
+    #     r.raise_for_status()
+    #     print(r.status_code)
+    #     return url, r.content
+
+    # https://dzen.ru/a/aJ4z-z8-oS7T3B82 семафор
     async def watermarked_from_urls(urls, concurrency=10):
         sem = asyncio.Semaphore(concurrency)
 
-        async with httpx.AsyncClient(headers=g) as client:
+        async with httpx.AsyncClient(headers=h) as client:
             async def worker(url):
                 async with sem:
-                    r = await client.get(url, timeout=30)
+                    r = await client.get(url, timeout=1)
                     r.raise_for_status()
+                    print(r.status_code)
+                    
                 img = Image.open(BytesIO(r.content))
                 return watermark(img)
 
@@ -92,10 +113,21 @@ async def waid(n):
     #     print("Status codes:", results)
 
     # even_checks = list(map(watermark, datas))
-    done = await watermarked_from_urls(photos)
-    done = ['car']+done
-    return done, car
 
+
+    async def fetch_one(ulr):
+        with httpx.Client() as client:
+            r = client.get(ulr, timeout=20)
+            return r.json()
+
+
+    # cart = await fetch_one(card1)
+    # car.append({ cart })
+
+    # done = await watermarked_from_urls(photos)
+    # done = ['car']+done
+
+    return car
 
 
 
