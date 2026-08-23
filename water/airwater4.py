@@ -7,15 +7,15 @@ from PIL import Image, ImageDraw, ImageFont
 
 import asyncio
 
-def watermark(base: Image.Image, opacity=0.7, font_size=17): #100
+def watermark(base: Image.Image, opacity=0.7, font_size=16): #100
 
     overlay = Image.new("RGBA", base.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay)
 
-    try:
-        font = ImageFont.truetype("public2/css/font/Danj.ttf", font_size)
-    except IOError:
-        font = ImageFont.load_default()
+    # try:
+    font = ImageFont.truetype("public2/css/font/Danj.ttf", font_size)
+    # except IOError:
+    # font = ImageFont.load_default()
 
     r, g, b = (60, 60, 90)
     alpha = int(255 * max(0, min(1, opacity)))
