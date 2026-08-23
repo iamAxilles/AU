@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 import asyncio
 
-def watermark(base: Image.Image, opacity=0.7, font_size=16): #100
+def watermark(base: Image.Image, opacity=0.7, font_size=15): #100
 
     overlay = Image.new("RGBA", base.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay)
