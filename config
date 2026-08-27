@@ -6,8 +6,8 @@
 	ignorecase = true
 	precomposeunicode = true
 [remote "origin"]
-	url = https://github.com/iamAxilles/AE.git
+	url = https://github.com/iamAxilles/AU.git
 	fetch = +refs/heads/*:refs/remotes/origin/*
-[branch "m2"]
+[branch "A9"]
 	remote = origin
 	merge = refs/heads/main

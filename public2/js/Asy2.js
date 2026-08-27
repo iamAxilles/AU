@@ -12,7 +12,9 @@
          //SRjson = JSON.parse(FER);
         localStorage.setItem("1st", wls);
 
-        try { sorts.dates(FER); }
+        try { 
+            sorts.dates(FER); 
+        }
         catch (err) { console.log(err); }
 
 
@@ -58,7 +60,7 @@
                         break;
         }
 
-    return FER })('/cars/'+wls.slice(1));
+    return FER })('/vehi/'+wls.slice(1));
 
 
 

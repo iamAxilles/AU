@@ -1,15 +1,20 @@
 # -*- coding: utf-8 -*-
 from fastapi import APIRouter
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+
 import requests, json
 from konlpy.tag import Kkma
 
+from encar import F
 from jsonCars import O, raQ, h
 from typing import List
+
 from water.airwater import run
 
-from water.waid import waid
-import httpx, base64
+# from water.waid import waid
+from water.waid4 import waid4
+
+import httpx, base64, asyncio
 
 from fastapi.encoders import jsonable_encoder
 
@@ -104,8 +109,13 @@ async def chevy(model: str, iddd: str):
         # return json_str
 
     if 'Trax' in model:
-        re = await raQ('https://api.encar.com/search/car/list/premium?count=true&q=(And.Hidden.N._.(C.CarType.Y._.(C.Manufacturer.%EC%89%90%EB%B3%B4%EB%A0%88(GM%EB%8C%80%EC%9A%B0_)._.(C.ModelGroup.%ED%8A%B8%EB%9E%99%EC%8A%A4._.Model.%EB%8D%94+%EB%89%B4+%ED%8A%B8%EB%9E%99%EC%8A%A4.))))&sr=%7CModifiedDate%7C0%7C20')
+        # re = await raQ('http://localhost:8000/vehi/Chevy=Trax-gm/1')
                       # https://api.encar.com/search/car/list/premium?count=true&q=(And.Hidden.N._.(C.CarType.Y._.(C.Manufacturer.쉐보레(GM대우_)._.(C.ModelGroup.트랙스._.Model.더+뉴+트랙스.))))&sr=|ModifiedDate|0|20
+
+        u = f'https://api.encar.com/v1/readside/vehicle/{iddd}'
+
+        # r = requests.get(ulr, headers=h)
+        # one = car["advertisement"]["price"]
 
         # i = list(filter(lambda d:d["Id"]==iddd, re))
         # one = next((d for d in re["SearchResults"] if d.get("Id") == iddd), None)
@@ -113,15 +123,21 @@ async def chevy(model: str, iddd: str):
 
         # p = await rePh(f'https://ci.encar.com/carsdata/cars/inspection/{iddd}_photoPerform1.jpg')
 
-        one = [d for d in re['SearchResults'] if d.get("Id") == iddd]
-        return await waid(one)
-        # return one
+        # one = [d for d in re['SearchResults'] if d.get("Id") == iddd]
+
+        # one = [d for d in trax1json if isinstance(d, dict) and d.get("Id") == iddd]
+        # one = [d for d in trax1json if d.get("Id") == iddd]
+        # return await waid(one)
+        return await waid4(u)
+
 
 
 async def rePh(ph):
     async with httpx.AsyncClient(headers=h) as cl:
         resp = await cl.get(ph)
-        return resp
+        return resp.json()
+
+
 
 
 @vehi.get("/list", response_model=List[str])

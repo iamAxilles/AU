@@ -21,7 +21,24 @@ import time, uvicorn
 from pydantic import BaseModel
 from datetime import datetime
 
+from fastapi.middleware.cors import CORSMiddleware
+ 
 app = FastAPI()
+
+origins = [
+    "https://localhost.tiangolo.com",
+    "http://localhost",
+    "http://localhost:8000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(encar.encar)
 app.include_router(jsonCars.cars)
 app.include_router(idvehi.vehi)
@@ -45,6 +62,10 @@ def hoo(body: Subscription):
 @app.get("/", response_class = FileResponse) ##index
 def pro3():
     return "public2/index.html"
+
+@app.get("/puter", response_class = FileResponse) ##index
+def puter():
+    return "puter.html"
 
 
 #@app.get("/en") ##english version
@@ -142,8 +163,8 @@ app.mount("/", StaticFiles(directory="public2"))
 
 
 
-#if __name__ == "__main__":
-#    uvicorn.run('main:app', host="0.0.0.0", port=33, reload=True)
+if __name__ == "__main__":
+   uvicorn.run('main:app', host="0.0.0.0", port=8000, reload=True)
 
 
 

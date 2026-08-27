@@ -1,20 +1,30 @@
 
 			//const res = await G(`/${autos}`);
 
-
+			
 			// const wlh = window.location.href;
 			// <a href="/car?${sr.Manufacturer}=${sr.ModelEn}#${sr.Id}${wlh.slice(-2)}" target="_blank">
+
 			const ls = (location.search).substr(0,wls.indexOf("-"));
-				function output(SR){
+				async function output(SR){
+					var badge = [];
+					for (let i in SR){
+						badge.push(SR[i].Badge);
+					};
+					for (let i = 0; i < badge.length; i++) {
+						var badgEn = await google1(badge[i]);
+					}
+
 					let data = document.querySelector(`data`);$(`data`).empty();
-						data.innerHTML = SR.map(sr => `<output>
+						data.innerHTML = SR.map(sr => 
+													 `<output>
 													<a href="/car${ls}#${sr.Id}"target="_blank">
 
 														<img src="${sr.image_data}">
 														  <img src="${sr.image_data2}">
 																</a>
 															<ul>
-																	<li>${sr.BadgEn}</li>
+																	<li>${badgEn}</li> //для google1
 																	<li>${sr.Model}</li>
 																	<li>₩${(sr.Price*10000).toLocaleString()}</li>
 																	<li>${(sr.Mileage).toLocaleString()}km</li>
@@ -23,6 +33,7 @@
 															</ul>
 
 														</output>`);console.log(SR.length);//translate2(SR)
+
 											window.scrollTo(0, 600);
 					$(`select[name='sort']`).css(`visibility`, `visible`);
 				//$("input:radio[name='group']").prop("checked", false);
@@ -97,6 +108,15 @@
 				});
 			});
 		};*/
+
+async function google1(T) {
+  const respo = await fetch("https://translate.googleapis.com/translate_a/single?format=text&client=gtx&sl=ko&tl=en&dt=t&q=" + T);
+    let data = await respo.text();
+      // let exp = /"(\\.|[^"\\])*"/;
+        let exp = /"[^"]+"/g;
+
+    return data.match(exp)[0]
+     }
 
 
 		const translate2 = function(SR){

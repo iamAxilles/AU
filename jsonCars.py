@@ -2,7 +2,7 @@ from fastapi import FastAPI, Query, Path
 from fastapi.responses import FileResponse, JSONResponse, HTMLResponse
 #from fastapi.staticfiles import StaticFiles
 
-import json, httpx
+import json, httpx, os
 from fastapi.requests import Request
 
 from fastapi import APIRouter
@@ -11,11 +11,13 @@ from typing import Annotated, Union, Optional
 from pydantic import BaseModel
 from datetime import datetime
 
-from encar import O
-from water.airwater import run
+from encar import O, F
+from water.airwater4 import run
 
+import asyncio
+import aiohttp
 
-cars = APIRouter(prefix="/cars")##
+cars = APIRouter(prefix="/vehi")##
 
 
 
@@ -47,6 +49,7 @@ def Brands(b: Annotated[Brands, Query()]):
 
 h = {
     'User-Agent': 'Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)',
+    "Accept": "application/json",
     'Referer': 'https://www.encar.com/'
             }
 # "Referer": 'https://ci.encar.com'
@@ -60,6 +63,7 @@ async def raQ(go):
     async with httpx.AsyncClient(headers=h) as cl:
         resp = await cl.get(go)
         print(resp.status_code)
+        print(str(resp.url))
         return resp.json()
 
 async def srQ(go):
@@ -257,20 +261,38 @@ sr = '%7CModifiedDate%7C0%7C20'
 
 
 @cars.get("/Chevy={model}-{k}/{p}")
-async def trax(model: str, k:str, p:int, idd: str | None = None):
-    trax1 = await run('https://api.encar.com/search/car/list/premium?count=true&q=(And.Hidden.N._.(C.CarType.Y._.(C.Manufacturer.%EC%89%90%EB%B3%B4%EB%A0%88(GM%EB%8C%80%EC%9A%B0_)._.(C.ModelGroup.%ED%8A%B8%EB%9E%99%EC%8A%A4._.Model.%EB%8D%94+%EB%89%B4+%ED%8A%B8%EB%9E%99%EC%8A%A4.))))&sr=%7CModifiedDate%7C0%7C20')
+async def trax(model:str, k:str, p:int, i:str | None = Query(default=None)):
+    URL = "https://api.encar.com/search/car/list/premium"
+    qty = 0
 
-    if model=='Trax'and k=='gm'and p==1:
-        return trax1
+    par = {
+    "count": "true",
+    "q": "(And.Hidden.N._.MultiViewHidden.N._.(C.CarType.Y._.(C.Manufacturer.%EC%89%90%EB%B3%B4%EB%A0%88(GM%EB%8C%80%EC%9A%B0_)._.(C.ModelGroup.%ED%8A%B8%EB%9E%99%EC%8A%A4._.Model.%EB%8D%94+%EB%89%B4+%ED%8A%B8%EB%9E%99%EC%8A%A4.))))",
+    "sr": f"%7CModifiedDate%7C{qty}%7C20",
+    }
 
+    # Все в одном запросе: http://localhost:8000/vehi/Chevy=Trax-gm/1?i=42334160
+    if model == "Trax" and k == "gm" and p == 1:
+        trax1 = await run('https://api.encar.com/search/car/list/premium?count=true&q=(And.Hidden.N._.MultiViewHidden.N._.(C.CarType.Y._.(C.Manufacturer.%EC%89%90%EB%B3%B4%EB%A0%88(GM%EB%8C%80%EC%9A%B0_)._.(C.ModelGroup.%ED%8A%B8%EB%9E%99%EC%8A%A4._.Model.%EB%8D%94+%EB%89%B4+%ED%8A%B8%EB%9E%99%EC%8A%A4.))))&sr=%7CModifiedDate%7C0%7C20')
+        if i is None:
+            return trax1
+        # iD 
+        # one = [d for d in trax1['SearchResults'] if d.get("Id") == i]
+        return one
 
-    # Все в одном запросе: http://localhost:8000/cars/Chevy=Trax-gm/1?idd=42334160
-    # if model == "Trax" and k == "gm" and p == 1:
-    #     if idd is None:
-    #         return 'trax1'
+    if model == "Trax" and k == "gm" and p == 2:
+        trax2 = await run('https://api.encar.com/search/car/list/premium?count=true&q=(And.Hidden.N._.MultiViewHidden.N._.(C.CarType.Y._.(C.Manufacturer.%EC%89%90%EB%B3%B4%EB%A0%88(GM%EB%8C%80%EC%9A%B0_)._.(C.ModelGroup.%ED%8A%B8%EB%9E%99%EC%8A%A4._.Model.%EB%8D%94+%EB%89%B4+%ED%8A%B8%EB%9E%99%EC%8A%A4.))))&sr=%7CModifiedDate%7C20%7C20')
+        return trax2
 
-    #     one = [d for d in trax1 if d.get("Id") == idd]
-    #     return one 
+    if model == "Trax" and k == "gm" and p == 3:
+        qty = 40
+        trax3 = await run(f'https://api.encar.com/search/car/list/premium?count=true&q=(And.Hidden.N._.MultiViewHidden.N._.(C.CarType.Y._.(C.Manufacturer.%EC%89%90%EB%B3%B4%EB%A0%88(GM%EB%8C%80%EC%9A%B0_)._.(C.ModelGroup.%ED%8A%B8%EB%9E%99%EC%8A%A4._.Model.%EB%8D%94+%EB%89%B4+%ED%8A%B8%EB%9E%99%EC%8A%A4.))))&sr=%7CModifiedDate%7C{qty}%7C20')
+        return trax3
+
+    if model=='Trax'and k=="gm"and p==4:
+        qty = 60
+        trax4 = await run(f'https://api.encar.com/search/car/list/premium?count=false&q=(And.Hidden.N._.MultiViewHidden.N._.(C.CarType.Y._.(C.Manufacturer.%EC%89%90%EB%B3%B4%EB%A0%88(GM%EB%8C%80%EC%9A%B0_)._.(C.ModelGroup.%ED%8A%B8%EB%9E%99%EC%8A%A4._.Model.%EB%8D%94+%EB%89%B4+%ED%8A%B8%EB%9E%99%EC%8A%A4.))))&sr=%7CModifiedDate%7C{qty}%7C20')
+        return trax4
 
     # искать 1 айди
     # if model=='trax'and k=='gm'and p==1:
@@ -281,6 +303,19 @@ async def trax(model: str, k:str, p:int, idd: str | None = None):
         #       one = next((d for d in results if d.get("Id") == idd), None)
             
         #     return trax1
+
+async def premium(pare):
+
+    async with httpx.AsyncClient() as C:
+        response = await C.get(
+            "https://api.encar.com/search/car/list/premium",
+            params=pare,
+        )
+        response.raise_for_status()
+        data = response.json()
+        print(response.url)
+        return data
+
 
 
 #for i in range(len(a)):

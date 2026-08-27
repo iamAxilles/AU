@@ -14,6 +14,10 @@ def O(F):
     with open(F, 'r') as jf:
         d = json.load(jf)
         return d["SearchResults"]
+def F(F):
+    with open(F, 'r') as jf:
+        d = json.load(jf)
+        return d
 
 
 @encar.get("/bmw{n}")
@@ -62,6 +66,7 @@ async def chevy(m:str):
                 result = [p["location"] for p in photos if p.get("type") in {"001", "007"}]
                 return result
         # case "trax":
+        #     return O('')
 
 
 

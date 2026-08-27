@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 async def run(LLL):
-    def watermark(base: Image.Image, opacity=0.85, font_size=15):#100
+    def watermark(base: Image.Image, opacity=0.7, font_size=16): #100
 
         overlay = Image.new("RGBA", base.size, (0, 0, 0, 0))
         draw = ImageDraw.Draw(overlay)
@@ -24,11 +24,11 @@ async def run(LLL):
         out = Image.alpha_composite(base, overlay)
 
         buffer = BytesIO()
-        out.convert("RGB").save(buffer, format="webp")
+        out.convert("RGB").save(buffer, format="webp", quality=70, method=2)
         # out.save('output_.webp')
 
         b64 = base64.b64encode(buffer.getvalue()).decode("ascii")
-        return f"data:image/jpeg;base64,{b64}"
+        return f"data:image/webp;base64,{b64}"
 
 
     def google(text: str) -> str:
@@ -60,7 +60,7 @@ async def run(LLL):
         except Exception as e:
             return json.dumps({"error": f"Connection failed: {e}"})
 
-        for item in data['SearchResults'][:25]:
+        for item in data['SearchResults'][:20]:
             try:
                 photo_path = item.get('Photo')
                 if not photo_path:
@@ -109,7 +109,7 @@ async def run(LLL):
                 print(len(marks))
     #pp = pprint.PrettyPrinter(indent=2, width=30, compact=True)
     ##return pp.pprint(marks)
-
+        
     #return json.dumps(marks, indent=2)
     return marks
 
