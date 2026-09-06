@@ -15,7 +15,7 @@ from encar import O, F
 from water.airwater4 import run
 
 import asyncio
-import aiohttp
+#import aiohttp
 
 cars = APIRouter(prefix="/vehi")##
 
