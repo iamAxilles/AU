@@ -1,0 +1,10 @@
+[project]
+name = "aenv"
+version = "0.1.0"
+description = "AU"
+requires-python = "==3.13.9"
+dependencies = [
+    "fastapi[standard]"
+]
+[tool.fastapi]
+entrypoint = "main:app"

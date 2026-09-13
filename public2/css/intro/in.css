@@ -1,0 +1,35 @@
+#header{
+  zoom:85%;
+}
+a.u-image-1{
+  margin-left: -4cm;
+}
+#carousel_93de{
+  zoom:80%;
+}
+footer{
+  zoom:65%;
+}
+@media (min-width: 1200px) {
+    .u-container-layout {
+        top: -9pc;
+        left: -2pc;
+    }
+.u-section-1 .u-text-1 {
+    font-size: 6.0rem;
+
+}
+
+data img[alt="1"]{
+   height:550px; 
+  padding-top: 100px;
+  float: left;
+ }
+ img[alt="2"]{
+  margin-top: 100px;
+  height: 380px;
+  float: right;
+  margin-right: 50px;
+ }
+
+https://michalsnik.github.io/aos/
